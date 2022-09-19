@@ -36,8 +36,10 @@ console.log(tempSorted[0],tempSorted[tempSorted.length-1])
 // 2. Log the result
 function getFilmingLocationsNumber2020 () {
 	let compteur=0;
+	const temp = [];
 	for(let i=0; i < filmingLocations.length; i++){
-		if(filmingLocations[i]["fields"]["annee_tournage"]=="2020"){
+		if((filmingLocations[i]["fields"]["annee_tournage"]=="2020")&& (!(temp.find(x => x == filmingLocations[i]["fields"]["adresse_lieu"])))){
+			temp[temp.length] = filmingLocations[i]["fields"]["adresse_lieu"]
 			compteur+=1;
 		}
 	}
@@ -54,27 +56,20 @@ console.log(`There is ${nb2020} filming locations in Paris in 2020 only`)
 //      '2021': 1234,
 //    }
 // 2. Log the result
-function getFilmingLocationsNumberPerYear (annee) {
-	let compteur=0
-	for(let pas=0; pas < filmingLocations.length; pas++){
-		if(filmingLocations[pas]["fields"]["annee_tournage"]===annee){
-			compteur+=1
+function getFilmingLocationsNumberPerYear () {
+	const filmingLocationsPerYear = {}
+	for(const elem of filmingLocations){
+		if(!(elem["fields"]["annee_tournage"] in filmingLocationsPerYear)){
+			filmingLocationsPerYear[elem["fields"]["annee_tournage"]] = 1;
+		}
+		else{
+			filmingLocationsPerYear[elem["fields"]["annee_tournage"]] += 1;
 		}
 	}
-	return compteur
-	// return {}
+	return filmingLocationsPerYear;
 }
 
-const filmingLocationsPerYear = {
-	'2016': getFilmingLocationsNumberPerYear('2016'),
-	'2017': getFilmingLocationsNumberPerYear('2017'),
-	'2018': getFilmingLocationsNumberPerYear('2018'),
-	'2019': getFilmingLocationsNumberPerYear('2019'),
-	'2020': getFilmingLocationsNumberPerYear('2020'),
-	'2021': getFilmingLocationsNumberPerYear('2021'),
-}
-
-console.log(filmingLocationsPerYear)
+console.log(getFilmingLocationsNumberPerYear())
 
 // 📝 TODO: Number of filming locations by district (arrondissement)
 // 1. Implement the function, the expected result is an object with
@@ -85,38 +80,20 @@ console.log(filmingLocationsPerYear)
 //    }
 // 2. Log the result
 function getFilmingLocationsNumberPerDistrict (arr) {
-	let compteur=0
-	for(let pas=0; pas < filmingLocations.length; pas++){
-		if(filmingLocations[pas]["fields"]["ardt_lieu"]===arr){
-			compteur+=1
+	const filmingLocationsPerDistrict = {};
+	for(const elem of filmingLocations){
+		if(!(elem["fields"]["ardt_lieu"] in filmingLocationsPerDistrict)){
+			filmingLocationsPerDistrict[elem["fields"]["ardt_lieu"]] = 1;
 		}
+		else{
+			filmingLocationsPerDistrict[elem["fields"]["ardt_lieu"]] += 1;
+		}
+
 	}
-	return compteur
-	// return {}
+	return filmingLocationsPerDistrict;
 }
-const filmingLocationsPerDistrict = {
-	'75001': getFilmingLocationsNumberPerDistrict('75001'),
-	'75002': getFilmingLocationsNumberPerDistrict('75002'),
-	'75003': getFilmingLocationsNumberPerDistrict('75003'),
-	'75004': getFilmingLocationsNumberPerDistrict('75004'),
-	'75005': getFilmingLocationsNumberPerDistrict('75005'),
-	'75006': getFilmingLocationsNumberPerDistrict('75006'),
-	'75007': getFilmingLocationsNumberPerDistrict('75007'),
-	'75008': getFilmingLocationsNumberPerDistrict('75008'),
-	'75009': getFilmingLocationsNumberPerDistrict('75009'),
-	'75010': getFilmingLocationsNumberPerDistrict('75010'),
-	'75011': getFilmingLocationsNumberPerDistrict('75011'),
-	'75012': getFilmingLocationsNumberPerDistrict('75012'),
-	'75013': getFilmingLocationsNumberPerDistrict('75013'),
-	'75014': getFilmingLocationsNumberPerDistrict('75014'),
-	'75015': getFilmingLocationsNumberPerDistrict('75015'),
-	'75016': getFilmingLocationsNumberPerDistrict('75016'),
-	'75017': getFilmingLocationsNumberPerDistrict('75017'),
-	'75018': getFilmingLocationsNumberPerDistrict('75018'),
-	'75019': getFilmingLocationsNumberPerDistrict('75019'),
-	'75020': getFilmingLocationsNumberPerDistrict('75020')
-}
-console.log(filmingLocationsPerDistrict)
+
+console.log(getFilmingLocationsNumberPerDistrict())
 
 // 📝 TODO: Number of locations per film, sorted in descending order
 // 1. Implement the function, result expected as an array of object like:
