@@ -38,7 +38,7 @@ function getFilmingLocationsNumber2020 () {
 	let compteur=0;
 	const temp = [];
 	for(let i=0; i < filmingLocations.length; i++){
-		if((filmingLocations[i]["fields"]["annee_tournage"]=="2020")&& (!(temp.find(x => x == filmingLocations[i]["fields"]["adresse_lieu"])))){
+		if((filmingLocations[i]["fields"]["annee_tournage"]==="2020")&& (!(temp.find(x => x == filmingLocations[i]["fields"]["adresse_lieu"])))){
 			temp[temp.length] = filmingLocations[i]["fields"]["adresse_lieu"]
 			compteur+=1;
 		}
@@ -100,23 +100,55 @@ console.log(getFilmingLocationsNumberPerDistrict())
 //    const result = [{film: 'LRDM - Patriot season 2', locations: 12}, {...}]
 // 2. Log the first and last item of the array
 function getFilmLocationsByFilm () {
-	return []
+	const result = [];
+
+	for(const elem of filmingLocations){
+		let include = false;
+		let movie = elem["fields"]["nom_tournage"];
+		if(result.length === 0){
+			result.push({'film':movie, 'locations':1})
+		}
+		else{
+			for (const e of result){
+				if(e['film'] === movie){
+					e['locations']+=1;
+					include=true;
+				}
+			}
+			if(!include){
+				result.push({'film':movie, 'locations':1});
+				include = false;
+			}
+		}
+	}
+	const compare = (a,b) => b['locations'] - a['locations'];
+	result.sort(compare);
+	return result;
 }
-console.log()
+let temp = getFilmLocationsByFilm()
+console.log(temp[0],temp[temp.length-1])
 
 // 📝 TODO: Number of different films
 // 1. Implement the function
 // 2. Log the result
 function getNumberOfFilms() {
-	return ''
+	return temp.length.toString()
 }
+console.log(getNumberOfFilms())
 
 // 📝 TODO: All the filming locations of `LRDM - Patriot season 2`
 // 1. Return an array with all filming locations of LRDM - Patriot season 2
 // 2. Log the result
 function getArseneFilmingLocations () {
-	return []
+	const resultPatriot = []
+	for(const elem of filmingLocations){
+		if((elem["fields"]["nom_tournage"]==="LRDM - Patriot season 2")&&(!resultPatriot.includes(elem["fields"]["adresse_lieu"]))){
+			resultPatriot.push(elem["fields"]["adresse_lieu"]);
+		}
+	}
+	return resultPatriot;
 }
+console.log(getArseneFilmingLocations())
 
 // 📝 TODO: Tous les arrondissement des lieux de tournage de nos films favoris
 //  (favoriteFilms)
